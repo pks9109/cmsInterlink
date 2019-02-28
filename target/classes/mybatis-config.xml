@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- <properties resource="db.properties" /> -->
+	<typeAliases>
+		<typeAlias type="com.homepage.cmsInterlink.model.Admin" alias="admin"/>
+		<typeAlias type="com.homepage.cmsInterlink.model.Board" alias="board"/>
+		<typeAlias type="com.homepage.cmsInterlink.model.BoardFile" alias="boardFile"/>
+	</typeAliases>
+
+	<mappers>
+		<mapper resource="admin/Admin.xml" />
+		<mapper resource="board/Board.xml" />
+		<mapper resource="board/BoardFile.xml" />
+	</mappers>
+</configuration>

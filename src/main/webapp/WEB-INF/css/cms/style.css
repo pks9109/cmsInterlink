@@ -1,0 +1,92 @@
+@charset "UTF-8";
+
+/*MEDIA QUERY*/
+@media screen and (max-width: 1399px){
+    body { min-width:100%;}
+}
+@media screen and (max-width:1199px) {
+    body { min-width:100%;}
+    .boardTable01 .boardUl04 .fileBut{width: 14%;}
+}
+@media screen and (max-width: 1023px){
+    body { min-width:100%;}
+    
+}
+@media screen and (max-width:954px) {
+	.boardBody{	top:20px	}
+	.boardCount ul{	left: -7%;	top: 345px;	}
+	.cmsTop{z-index: 9;}
+	.boardTable{	overflow-x: scroll;	}
+    .boardTable table{	width: 650px; margin: 0 auto;	}
+    .boardTable01 .boardUl04 li:first-child{	width: 100%;	margin-right: 0;	}
+    .boardTable01 .boardUl04 .fileBut{	width: auto;	position: absolute;	right: 5px;	}
+    .boardTable01 .boardUl04 .writeBut{	margin-top: 5px;	width: 100%;	}
+    .adminTitle{	margin-top:40px;	}
+    .adminTable{	width: 100%;	}
+}
+@media screen and (max-width: 889px) {
+}
+@media screen and (max-width: 779px){
+	body { min-width:100%;}
+	.cmsLeft{visibility: hidden;	top:50px;	right: 0;	background:#001435; }
+	.conBody{padding-left: 0;	padding-top: 50px;}
+	.cmsTop{height: 50px;}
+	.cmsTopLogo{float: none; text-align: center;	height: 70%;}
+	.cmsTopLogo img{position: relative;}
+	.cmsTopText{margin:0;	width: 100%;	font-size: 0.7em;}
+	.cmsTop .cmsTopText .cmsTopText3{	margin: 0 10px;	}
+	.cmsTopText .cmsTopText2{	margin-left:0;	}
+	.cmsTopText a{margin: 0;}
+	.dropBut{visibility: visible;	position: fixed;	right: 0;	height: 50px;	z-index: 10;}
+	.dropBut img{height: 80%; padding: 3px; cursor: pointer;}
+}
+@media screen and (max-width: 754px) {
+	body { min-width:100%;}
+	
+}
+@media screen and (max-width: 654px) {
+	.popup{width: 95%;}
+	.popupTitle .popupTitle1{font-size: 20px;}
+	.popupTitle {margin-top: 35px;}
+	.popupCon2 .popupCon2_1, .popupCon2 .popupCon2_1 .popupCon2_1_id{width: 100%;}
+	.popupCon2 .popupCon2_1 .popupCon2_1_bt{	position: absolute;	right: 10.5%;}
+	.popupCon2 .popupCon2_2, .popupCon2_1_E{	width: 100%;	margin-left: 0;	}
+	.popupCon2_1_But{width: 102%;}
+	.cmsMainCon .con3 .con3Text .con2But2{margin-left: 0;}
+	.cmsMainCon .con2 .con2But .con2But1{padding: 10px 75px;}
+}
+@media screen and (max-width: 570px) {
+	.boardTable01 .boardUl01 li, .boardTable01 .boardUl02 li,
+	.boardTable01 .boardUl03 li, .boardTable01 .boardUl04 li{	float: none;	width: 100%;	}
+	.boardTable01 .boardUl02 li label, .boardTable01 .boardUl02 li input{width: 100%;}
+	.boardTable01 .boardUl02 li:first-child {	margin-bottom: 5px;	}
+	.boardTable01 .boardUl03 textarea{	height: 150px;	}
+	.boardTable01 .boardUl04 .fileBut{	bottom: 35px;	}
+	.boardTable01 .boardUl04 li:first-child{	width:100%;	}
+	
+	.cmsMainCon{	width: 100%;	transform:none;	left: 0;	top: 10%;	}
+	.cmsMainCon .con1{	font-size: 20px;	top:27px;	}
+	.cmsMainCon .bar{	top: 23px;	}
+	.cmsMainCon .mode_ch{	top: 47px;	font-size: 13px;	}
+	.cmsMainCon .mode_ch input {	position: relative;	top: 2px;	}
+	.cmsMainCon .con2 .con2Input .con2Input1{	margin-top: 18px;	}
+	.cmsMainCon .con2 .con2But{width: 66%;	}
+}
+/* @media screen and (max-width: 479px) {
+	body { min-width:100%;}
+	.boardTable01 .boardUl01 li, .boardTable01 .boardUl02 li,
+	.boardTable01 .boardUl03 li, .boardTable01 .boardUl04 li{	float: none;	width: 100%;	}
+	.boardTable01 .boardUl02 li label, .boardTable01 .boardUl02 li input{width: 100%;}
+	.boardTable01 .boardUl02 li:first-child {	margin-bottom: 5px;	}
+	.boardTable01 .boardUl03 textarea{	height: 150px;	}
+	.boardTable01 .boardUl04 .fileBut{	bottom: 35px;	}
+	.boardTable01 .boardUl04 li:first-child{	width:100%;	}
+	
+	.cmsMainCon{	width: 100%;	transform:none;	left: 0;	top: 10%;	}
+	.cmsMainCon .con1{	font-size: 20px;	top:27px;	}
+	.cmsMainCon .bar{	top: 23px;	}
+	.cmsMainCon .mode_ch{	top: 47px;	font-size: 13px;	}
+	.cmsMainCon .mode_ch input {	position: relative;	top: 2px;	}
+	.cmsMainCon .con2 .con2Input .con2Input1{	margin-top: 18px;	}
+	.cmsMainCon .con2 .con2But{width: 66%;	}
+} */

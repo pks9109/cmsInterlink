@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="admins">
+	<resultMap type="admin" id="admin_Result">
+		<result property="ad_seq" column="ad_seq" />
+		<result property="ad_id" column="ad_id" />
+		<result property="ad_password" column="ad_password" />
+		<result property="ad_name" column="ad_name" />
+		<result property="ad_contact" column="ad_contact" />
+		<result property="ad_email" column="ad_email" />
+		<result property="ad_hiredate" column="ad_hiredate" />
+		<result property="ad_register_date" column="ad_register_date" />
+		<result property="ad_update_id" column="ad_update_id" />
+		<result property="ad_update_date" column="ad_update_date" />
+		<result property="ad_rank" column="ad_rank" />
+		<result property="ad_auth" column="ad_auth" />
+		<result property="ad_division" column="ad_division" />
+		<result property="ad_etc" column="ad_etc" />
+	</resultMap>
+	
+	<!-- 관리자 가입 쿼리 -->
+	<insert id="insert" parameterType="admin">
+		insert into admin_tb values(NULL, #{ad_id}, password(#{ad_password}), #{ad_name}, #{ad_contact}, #{ad_email}, now(), now(), #{ad_update_id},
+		now(), NULL, 0, 0, NUll);
+	</insert>
+	
+	<!-- 관리자 아이디 중복 확인 쿼리 -->
+	<select id="idcheck" parameterType="String" resultType="Integer">
+		select count(*) from admin_tb where ad_id = #{ad_id}
+	</select>
+	
+	<!-- 관리자 로그인 확인 쿼리 -->
+	<select id="selectUserInfo" parameterType="HashMap" resultType="admin">
+		select * from admin_tb where ad_id = #{ad_id} 
+		and ad_password = password(#{ad_password})
+	</select>
+	
+	<!--  권수추가  -->
+	<!-- 관리자정보읽어오기 -->
+	<select id="admin_read" parameterType="int" resultType="admin">
+		select * 
+		from admin_tb where ad_seq = #{ad_seq} 
+	</select>
+	
+	<!-- 관리자 수정 -->
+    <update id="admin_update" parameterType="java.util.HashMap">
+    	update 
+    	admin_tb
+		set
+		ad_name = #{ad_name},
+    	ad_contact = #{ad_contact},
+    	ad_email = #{ad_email},
+    	ad_hiredate = #{ad_hiredate},
+    	ad_update_id = #{ad_update_id},
+		ad_update_date = now(),
+		ad_rank = #{ad_rank},
+		ad_etc = #{ad_etc}    	
+		where ad_seq = #{ad_seq}
+   </update>
+   
+   <!-- 관리자 비밀번호체크 -->
+   <select id="passwordCheck" resultType="int" parameterType="java.util.HashMap">
+        SELECT 
+            COUNT(*) 
+        FROM 
+        	admin_tb
+        WHERE 
+        	ad_seq = #{ad_seq} and ad_password = password(#{ad_ori_password})
+    </select>
+    
+    <!-- 관리자 수정 -->
+    <update id="password_update" parameterType="java.util.HashMap">
+    	update 
+    	admin_tb
+		set
+     	ad_password = password(#{ad_password}),
+    	ad_update_id = #{ad_update_id},
+		ad_update_date = now()    	
+		where ad_seq = #{ad_seq}
+   </update>
+   
+   <!-- 사원목록출력 -->
+   <select id="employee_list" resultType="admin" parameterType="java.util.HashMap">
+	    select
+        *
+        from admin_tb
+        where ad_auth = 1        
+        order by ad_seq desc
+        
+        limit #{start}, #{end};
+	</select>
+	
+	<!-- 사원목록 전체 수 -->
+	<select id="employee_cnt" resultType="int" parameterType="admin">
+	
+	    select count(ad_seq) from admin_tb where ad_auth = 1 
+	
+	</select>
+	
+	<!-- 회원가입대기자 전체 수 -->
+	<select id="wait_cnt" resultType="int" parameterType="admin">
+	    select count(ad_seq) from admin_tb where ad_auth = 0 
+	</select>
+	
+	<!-- 사원관리 삭제쿼리  -->
+	<select id="employee_delete" parameterType="int">
+	delete from admin_tb where ad_seq = #{ad_seq};
+	</select>
+	
+	<!-- 사원목록출력 -->
+   <select id="wait_list" resultType="admin" parameterType="java.util.HashMap">	
+	    select	     
+        *        
+        from admin_tb
+        where ad_auth = 0        
+        order by ad_seq desc	
+	</select>
+	
+	<!-- 회원가입대기자 승인 -->
+	<update id="wait_admit" parameterType="java.util.HashMap">
+        update
+            admin_tb
+		set
+		ad_hiredate = #{ad_hiredate},
+		ad_rank = #{ad_rank},
+        ad_auth = #{ad_auth},
+        ad_update_date = now()    
+        where
+        ad_seq = #{ad_seq}
+    </update>
+</mapper>

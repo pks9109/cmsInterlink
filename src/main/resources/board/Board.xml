@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="boards">
+	<resultMap type="Board" id="boardResult">
+		<result property="board_seq" column="board_seq" />
+		<result property="board_division" column="board_division" />
+		<result property="board_notice" column="board_notice" />
+		<result property="board_title" column="board_title" />
+		<result property="board_content" column="board_content" />
+		<result property="board_hit" column="board_hit" />
+		<result property="board_use_yn" column="board_use_yn" />
+		<result property="board_register_id" column="board_register_id" />
+		<result property="board_register_date" column="board_register_date" />
+		<result property="board_update_id" column="board_update_id" />
+		<result property="board_update_date" column="board_update_date" />
+		<result property="board_etc" column="board_etc" />
+
+	</resultMap>
+	
+	<!-- 공통 쿼리 -->
+	
+	<!-- 게시글 등록 쿼리 -->
+	<insert id="board_insert" parameterType="Board">
+	
+		insert into board_tb
+			
+			values(
+
+			#{board_seq},
+			#{board_division},
+			#{board_notice},
+			#{board_title},
+			#{board_content},
+			#{board_hit},
+			#{board_use_yn},
+			#{board_register_id},
+			now(),
+			#{board_update_id},
+			now(),
+			#{board_etc}
+		
+        );
+        <selectKey keyProperty="board_seq" resultType="Integer">
+   			SELECT LAST_INSERT_ID();
+  		</selectKey>        
+	</insert>
+	
+	<!-- 게시글 조회 쿼리 -->
+	<select id="board_read" resultType="Board" parameterType="int"> 
+        	
+        	select a.*,		
+        	(select a.board_seq  from board_tb a 
+            where a.board_division = #{board_division} and a.board_use_yn = 'Y' and <![CDATA[a.board_seq < #{board_seq}]]>  
+            ORDER BY a.board_seq desc LIMIT 1) as preview,
+            (select a.board_title  from board_tb a 
+            where a.board_division = #{board_division} and a.board_use_yn = 'Y' and <![CDATA[a.board_seq < #{board_seq}]]>  
+            ORDER BY a.board_seq desc LIMIT 1) as pretitle,
+            (select a.board_seq from board_tb a 
+            where a.board_division = #{board_division} and a.board_use_yn = 'Y' and <![CDATA[a.board_seq > #{board_seq}]]>  
+            ORDER BY a.board_seq asc LIMIT 1) as nextview,
+            (select a.board_title from board_tb a 
+            where a.board_division = #{board_division} and a.board_use_yn = 'Y' and <![CDATA[a.board_seq > #{board_seq}]]>  
+            ORDER BY a.board_seq asc LIMIT 1) as nexttitle
+
+        	from board_tb a where a.board_seq = #{board_seq}; 
+	</select>
+	
+	<!-- 게시글 리스트 출력 쿼리 -->
+	<select id="board_list" resultType="Board" parameterType="java.util.HashMap">
+	
+	    select 
+        a.*,
+        
+        (select count(b.file_seq) from file_tb b where b.file_use_yn = 'y' and b.board_seq = a.board_seq) as file_cnt,
+        
+        (select sum(b.file_hit) from file_tb b where b.board_seq = a.board_seq and b.file_use_yn = 'Y'  ) as file_hit,
+        
+        (select group_concat(b.file_sub_name,'*',a.board_division,'*',b.file_seq separator '|') 
+        from file_tb b where a.board_seq = b.board_seq and b.file_use_yn='Y') as file_sub_name,
+          
+        (select group_concat(b.file_ori_name separator '|') from file_tb b 
+        where a.board_seq = b.board_seq and b.file_use_yn='Y') as file_ori_name
+        
+        from board_tb a
+        
+         where a.board_division = #{board_division} and a.board_use_yn = 'Y'
+		 <choose>
+     	<when test="sch_type == 'board_title'">
+		  AND a.board_title like CONCAT('%', #{sch_value}, '%')
+		  </when>
+		  <when test="sch_type == 'board_content'">
+		  AND a.board_content like CONCAT('%', #{sch_value}, '%')
+		  </when>
+		  </choose>
+        order by a.board_notice = 1 desc , a.board_seq desc
+        
+        limit #{start}, #{end};
+	
+	</select>
+	
+	<!-- 게시글 전체 count 수 쿼리 -->
+	<select id="board_cnt" resultType="int" parameterType="Board">
+	
+	    select count(board_seq) from board_tb 
+	    where board_division = #{board_division} and board_use_yn = 'y'
+     	<choose>
+	     	  <when test="sch_type == 'board_title'">
+			  AND board_title like CONCAT('%', #{sch_value}, '%')
+			  </when>
+			  <when test="sch_type == 'board_content'">
+			  AND board_content like CONCAT('%', #{sch_value}, '%')
+			  </when>
+	    </choose>
+	
+	</select>
+	
+	<!-- 게시글 수정 쿼리 -->
+    <update id="board_update" parameterType="java.util.HashMap">
+    	update 
+    	board_tb
+    	    	
+    	set			
+		board_notice = #{board_notice},
+    	board_title = #{board_title},
+    	board_content = #{board_content},
+    	board_update_id = #{board_update_id},
+    	board_update_date = now()
+
+		where board_seq = #{board_seq};
+    </update>
+    
+    <!-- 게시글 삭제 쿼리 -->
+    <update id="board_delete" parameterType="java.util.HashMap">
+    	
+        update
+            board_tb
+		set
+        board_use_yn = 'N',
+        board_update_date = now()    
+        where
+        board_seq = #{board_seq};
+            
+    </update>
+    
+	<!-- 게시글 조회 수 쿼리 클릭 시 1씩 증가 -->
+	 <!-- <update id="download_hit" parameterType="int">
+        update board_tb set board_hit = board_hit + 1 where board_seq = #{board_seq}
+    </update> -->
+    
+
+
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing 
+		infrastructure -->
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven>
+		<argument-resolvers>
+			<beans:bean class="com.homepage.cmsInterlink.util.CustomMapArgumentResolver" />
+		</argument-resolvers>
+	</annotation-driven>
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+	<resources mapping="/css/**" location="/WEB-INF/css/" />
+	<resources mapping="/js/**" location="/WEB-INF/js/" />
+	<resources mapping="/fonts/**" location="/WEB-INF/fonts/" />
+	<resources mapping="/util/**" location="/WEB-INF/util/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
+		in the /WEB-INF/views directory -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<context:component-scan base-package="com.homepage.cmsInterlink" />
+	
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</beans:bean>
+
+	<beans:bean id="fileViewResolver"
+		class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<beans:property name="order" value="0" />
+	</beans:bean>
+	
+	<!-- 인터셉터객체생성 -->
+	<beans:bean id="interceptors" class="com.homepage.cmsInterlink.controller.LoginCheckInterceptor">
+	</beans:bean>	
+	<!-- Interceptor 설정 -->
+     <interceptors>
+        <interceptor>
+        
+        	<!-- 관리자 페이지 intercepter 적용 -->
+       		<mapping path="/*"/>
+
+       		
+			<!-- 관리자 페이지 intercepter 제외 -->
+            <exclude-mapping path="/cms_main"/>
+            <exclude-mapping path="/userIdCheck"/>
+            <exclude-mapping path="/loginTry"/>
+            <exclude-mapping path="/sign_form_insert"/>
+            <exclude-mapping path="/logout"/>
+            <exclude-mapping path="/boardFileDown"/>
+            
+			<beans:ref bean="interceptors"/>
+        </interceptor>
+    </interceptors>
+	
+
+</beans:beans>

@@ -1,0 +1,85 @@
+@charset "UTF-8";
+@font-face {
+	font-family: KoPub;
+	src: url("../../../fonts/KoPub-Dotum-Light.ttf");
+}
+@font-face {
+	font-family: 'KoPub_medium';
+	src: url("../../../fonts/KoPub-Dotum-Medium.ttf");
+}
+@font-face {
+	font-family: gotham;
+	src: url("../../../fonts/Gotham-Bold.otf");
+}
+@font-face {
+	font-family: HPSimplified_Rg;
+	src: url("../../../fonts/HPSimplified_Lt.ttf");
+}
+.conBody{	position: relative;	padding-top: 60px;	padding-left: 210px;	}
+.boardBody{ width: 80%;	margin: 0 auto;	top: 100px;	position: relative;	max-width: 900px;	}
+.textLeft{text-align: left;}
+
+/* 리스트 */
+.boardBody .boardSearch{	overflow: hidden;	}
+.boardBody .boardSearch .searchBox{	float: right;	border: 1px solid #0e223a;	border-radius: 25px;	height: 25px;	padding: 0 10;	}
+.boardBody .boardSearch .searchImg{	float: right; width: 15px;	position: relative;	top: 5px;	right: -160px;	}
+.boardBody .boardSearch .searchBox::placeholder{	color: gray;	}
+.boardTable table{	color: white;	font-size: 12px;	line-height: 2em;	text-align: center;	border-collapse: collapse;	width: 100%;	}
+.boardTable .boardListTable tr td {	border-bottom: 1px solid #a7a7a7;	}
+.boardTable .boardListTable tr th{	border-bottom:1px solid #ffffff;	border-top:1px solid #ffffff;	}
+.boardTable{	margin: 15px 0;	}
+.boardWrite{	width: 100%; text-align: right;	font-size: 14px;	}
+.boardWrite .writeBtn1{	background: white;	padding: 3px 10px;	border:1px solid;	border-radius: 5px;	font-family: gotham;	font-weight: 700;	cursor: pointer;	}
+.boardCount{	width: 100%; text-align: center;	overflow: hidden;	font-size: 15px;	cursor: pointer;	}
+.boardCount ul{	 list-style:none;	color: white;	overflow: hidden;	position: absolute;	left: 40%;	padding:0;	}
+.boardCount ul li{	float: left;	padding: 0 3px;	}
+
+/* 상세페이지 글쓰기 수정 */
+
+.boardWriteTitle{	font-size: 15px; color: white;	letter-spacing: 1.5px;	}
+.boardWriteTable tr td{	border-bottom: hidden;	line-height: 2.5em;	}
+.boardTable .boardWriteTable .checkbox {	vertical-align: middle;	margin-right: 0.5%;	}
+.boardTable .boardWriteTable .checkboxA{	margin-right: 1%;	}
+.boardTable .width100 input{	width: 100%; padding: 3px 5px;	border: 1px solid #fff;	border-radius: 3px;	}
+.boardTable textarea{	width: 100%;	height: 250px;	resize: none;	border: 1px solid #fff;	border-radius: 3px;	padding: 3px 5px;	}
+.boardTable .fileNameBox{	line-height: 1.5em;	width: 92%;	background: white;	height: 55px;	margin-top: 5px;	border: 1px solid #fff;	border-radius: 3px;	text-align: left;	color: black;	padding: 3px 0 0 5px;	}
+.boardTable .fileNameBox a{display: block;}
+.boardTable .fileBut{	background: #294461;	padding: 2px 12px;	border: 1px solid #294461;	border-radius: 5px;	cursor: pointer;	}
+.boardTable .fileDiv{	float: left;	padding-top: 5px;	margin-left: -13px;	}
+.boardTable .boardWriteButDiv{	text-align: right;	margin-top: 9px;	}
+.boardTable .boardWriteButDiv a {	background: #93c9fe;	margin-left: 7px;	width: 75px;	color:black;	text-align: center;	display: inline-block;	border: 1px solid;	border-radius: 5px;	font-weight: 700;	line-height: 2em;	cursor: pointer;	}
+
+/* 글쓰기 ul */
+.boardTable01{	width: 100%;	}
+.boardTable01 ul{	font-size: 14px;	margin: 8px 0;	}
+.boardTable01 input, .boardTable01 textarea{	border-radius: 5px;	}
+.boardTable01 .boardUl01 {	list-style: none;	width: 100%;	overflow: hidden;	padding: 0;	color: white;	margin-top:20px;	}
+.boardTable01 .boardUl01 li:first-child{	width: 14%;	padding-left:1%;	}
+.boardTable01 .boardUl01 li:last-child{	width: 85%;	}
+.boardTable01 .boardUl01 li{	float: left;	}
+
+.boardTable01 .boardUl02{	list-style: none;	width: 100%;	overflow: hidden;	padding: 0;	color: white;	}
+.boardTable01 .boardUl02 li{	float: left;	width: 49%;	}
+.boardTable01 .boardUl02 li:first-child{	margin-right: 2%;	}
+.boardTable01 .boardUl02 li label {	width: 28%;	padding-left:2%; display: block;	float: left;	}
+.boardTable01 .boardUl02 li input {	width: 70%;	}
+
+.boardTable01 .boardUl03{	list-style: none;	width: 100%;	overflow: hidden;	padding: 0;	color: white;	margin-bottom: 0px;	}
+.boardTable01 .boardUl03 textarea{	width: 100%;	resize: none;	height: 230px;	}
+
+.boardTable01 .boardUl04{	list-style: none;	width: 100%;	overflow: hidden;	padding: 0;	color: white;	margin-top:0px;	}
+.boardTable01 .boardUl04 li{	float: left;}
+.boardTable01 .boardUl04 li:first-child{	margin-right: 2%;	width: 60%;	background: white;	height: 75px;	color: black;	border-radius: 5px;	}
+.boardTable01 .boardUl04 li:first-child a{	padding-left:10px;	}
+.boardTable01 .boardUl04 .fileBut a{	background: #294361;	width:75px;	height:20px;	padding-top:5px;	display: block;	margin:9px 0;	text-align: center;	font-size: 12px;	border-radius: 5px;	}
+.boardTable01 .boardUl04 .fileBut{	width: 15%;}
+.boardTable01 .boardUl04 .writeBut{	width: 38%;}
+.boardTable01 .boardUl04 .writeBut a{	background: #93c9fe;	display: block;	width: 66px;	text-align: center;	float: right;	margin: 5px;	margin-top:0;	color: black;	height: 21px;	padding-top:5px;	font-weight: 700;	font-size: 12px;	border-radius: 5px;	}
+.boardTable01 .boardUl04 .writeBut a:first-child{	margin-right: 0;	}
+
+a{cursor: pointer;}
+
+.downCntli1 div img{	width: 20px; height: 20px;	}
+.downCntli1 div{float: left;}
+.downCntli2 div img{	width: 20px; height: 20px;	}
+.downCntli2 div{float: left;}

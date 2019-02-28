@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="boardFiles">
+	<resultMap type="BoardFile" id="boardFileResult">
+		<result property="file_seq" column="file_seq" />
+		<result property="board_seq" column="board_seq" />
+		<result property="file_ori_name" column="file_ori_name" />
+		<result property="file_sub_name" column="file_sub_name" />
+		<result property="file_ext_name" column="file_ext_name" />
+		<result property="file_size" column="file_size" />
+		<result property="file_hit" column="file_hit" />
+		<result property="file_path" column="file_path" />
+		<result property="file_use_yn" column="file_use_yn" />
+		<result property="file_register_id" column="file_register_id" />
+		<result property="file_register_date" column="file_register_date" />
+		<result property="file_update_id" column="file_update_id" />
+		<result property="file_update_date" column="file_update_date" />
+		<result property="file_etc" column="file_etc" />
+	</resultMap>
+	
+	<!-- 파일 등록 쿼리 -->
+	<insert id="file_insert" parameterType="BoardFile">
+		insert into file_tb
+			
+			values(
+
+			#{file_seq},
+			#{board_seq},
+			#{file_ori_name},
+			#{file_sub_name},
+			#{file_ext_name},
+			#{file_size},
+			'0',
+			#{file_path},
+			#{file_use_yn},
+			#{file_register_id},
+			now(),
+			#{file_update_id},
+			now(),
+			#{file_etc}
+		
+        );
+	</insert>
+	
+	<!-- 파일 리스트 출력 쿼리 -->
+	<select id="file_list" resultType="BoardFile">
+	<!-- select * from file_tb where file_use_yn = 'y' and board_seq = #{board_seq}; -->
+	select a.file_seq, a.board_seq, a.file_ori_name, 
+         concat(a.file_sub_name,'*',b.board_division) as file_sub_name,
+         a.file_ext_name,
+         a.file_size, a.file_hit, a.file_path, a.file_use_yn, 
+         a.file_update_date, a.file_etc, b.board_division 
+         from file_tb a left join board_tb b on a.board_seq = b.board_seq  
+         where a.file_use_yn = 'y' and a.board_seq = #{board_seq};
+	</select>
+	
+	<!-- update폼에서 수정시 파일 N처리할때 필요함 -->
+	<update id="file_updateform_delete" parameterType="BoardFile">
+        update
+            file_tb
+		set
+        file_use_yn = 'N',
+        file_update_id = #{file_update_id},
+        file_update_date = now()    
+        where
+        file_seq = #{file_seq};
+            
+    </update>
+        
+    <!-- 게시판 목록과 상세보기에서 삭제처리할때 사용 -->    
+    <update id="file_delete" parameterType="BoardFile">
+        update
+            file_tb
+		set
+        file_use_yn = 'N',
+        file_update_id = #{file_update_id},
+        file_update_date = now()    
+        where
+        board_seq = #{board_seq};
+            
+    </update>
+    
+    <!-- 파일 다운로드 시 해당 경로에 파일이 있을경우 file_hit 1씩 증가 -->
+    <update id="file_hit" parameterType="int">
+    update file_tb set file_hit = file_hit + 1 where file_seq = #{board_seq};
+    </update>
+
+</mapper>
