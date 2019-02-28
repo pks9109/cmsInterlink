@@ -260,6 +260,12 @@ public class CmsController {
 
 		return "admin/logout";
 	}
+	//로그아웃
+	@RequestMapping(value = "/mainMove") 
+	public String mainMove(HttpServletRequest request) {
+
+		return "admin/mainMove";
+	}
 	//공지사항 목록
   	@RequestMapping(value = "/boardList") 
   	public String boardList(@RequestParam Map<String, Object> paramMap, Model model, HttpSession session, Board board) {

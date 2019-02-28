@@ -11,20 +11,19 @@
 	</div>
 	<div class="cmsTopText">
 		<a class="cmsTopText1" style="cursor: default;">${sessionScope.ad_name}</a><a class="cmsTopText2" style="cursor: default;"> 님 환영합니다.</a>		
-		<a class="cmsTopText3" id="sessionExit" href="http://www.gpcamp.kr" target="_blank" style="cursor: pointer;">메인</a>
-		
-		<script>
-	$('#sessionExit').click(function(){
+		<a class="cmsTopText3" style="cursor: pointer;">메인</a>
+		<a class="cmsTopText4" onclick="logout()">로그아웃</a>
+	<script>
+	$('.cmsTopText3').click(function(){
 		var conPath = window.location.pathname.substring(0, window.location.pathname.indexOf("/",2)); //contextpath 구함
-		var con = confirm("메인 홈페이지로 이동시 관리자페이지는 로그아웃됩니다."+'\n'+"메인페이지는 새창으로 열립니다."+'\n\n'+"이동하시겠습니까?");
+		var con = confirm("메인 홈페이지로 이동시 관리자페이지는 로그아웃됩니다."+'\n'+'\n\n'+"이동하시겠습니까?");
 		if(con == true){
 		alert("정상적으로 로그아웃 되었습니다.");
-		location.href = conPath + "/logout";
+		location.href = conPath + "/mainMove";
 		}else{
 		 return false;	
 		}
 	});
 	</script>
-		<a class="cmsTopText4" onclick="logout()">로그아웃</a>
 	</div>
 </div>

@@ -125,12 +125,11 @@ jQuery(document).ready(function($){
 		
 		//로그아웃
 		function logout() {
-			
 			var conPath = window.location.pathname.substring(0, window.location.pathname.indexOf("/",2)); //contextpath 구함
 			
 			location.href = conPath + "/logout";
 		}
-		
+				
 		//내정보수정 유효성
 		function admin_modify() { 
 			var str_space = /\s/; //띄어쓰기체크
