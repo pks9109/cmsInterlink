@@ -14,7 +14,6 @@
 }
 @media screen and (max-width:954px) {
 	.boardBody{	top:20px	}
-	.boardCount ul{	left: -7%;	top: 345px;	}
 	.cmsTop{z-index: 9;}
 	.boardTable{	overflow-x: scroll;	}
     .boardTable table{	width: 650px; margin: 0 auto;	}

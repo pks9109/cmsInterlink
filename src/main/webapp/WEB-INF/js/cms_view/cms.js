@@ -82,6 +82,7 @@ jQuery(document).ready(function($){
 			var conPath = window.location.pathname.substring(0, window.location.pathname.indexOf("/",2)); //contextpath 구함
 			var regNumber = /^\d{2,3}-\d{3,4}-\d{4}$/;
 	    	var temp = $("#ad_contact").val();
+	    	var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/; //이메일형식체크
 	    	
 			if($("#ad_id").val().length <5){
 				alert("아이디는 5자이상 입력하세요.");
@@ -104,12 +105,15 @@ jQuery(document).ready(function($){
 				alert("연락처를 입력해주세요.");
 				this.focus();
 			}else if(!regNumber.test(temp)){	
-		    	$("#ad_contact").focus();
 		        $("#ad_contact").val("");
 		        alert("연락처를 알맞을 형식으로 입력해주세요.(-포함)" +'\n'+ "ex)010-0000-0000");
 		        this.focus();
 			 }else if($("#ad_email").val().length <1){
 				alert("이메일을 입력해주세요.");
+				this.focus();
+			 }else if(exptext.test($("#ad_email").val()) == false) {
+				$("#ad_email").val('');
+				alert("이메일형식이 바르지 않습니다."+'\n'+"ex)info@interlinknc.com");
 				this.focus();
 			}else if($("#idchek_hidden").val()!="1"){
 				alert("아이디 중복채크를 해주세요.");
@@ -119,7 +123,7 @@ jQuery(document).ready(function($){
 				var comSubmit = new ComSubmit("sign_form");
 				comSubmit.setUrl(url);
 				comSubmit.submit();
-				alert("가입되었습니다. 관리자에게 승인 요청을 해주세요.")
+				alert("가입되었습니다. 관리자에게 승인 요청을 해주세요.");
 			}
 		}
 		

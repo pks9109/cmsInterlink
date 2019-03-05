@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.homepage.cmsInterlink.model.Admin;
+import com.homepage.cmsInterlink.model.Authority;
 import com.homepage.cmsInterlink.model.Board;
 import com.homepage.cmsInterlink.model.BoardFile;
 import com.homepage.cmsInterlink.model.Fileup;
@@ -74,36 +75,56 @@ public class CmsController {
 	}
 	//로그인 액션
 	@RequestMapping(value = "/loginTry")
-	public ModelAndView loginTry(HttpServletRequest request, @RequestParam Map<String, Object> map, String loginSelect) throws Exception {
+	public ModelAndView loginTry(HttpServletRequest request, @RequestParam Map<String, Object> map, String ad_division) throws Exception {
 		ModelAndView mav = new ModelAndView();
-	    
-		if(loginSelect.equals("admin")) {
-		/*관리자로그인*/
-
-		Admin admin = as.selectUserInfo(map);	
-		if (admin == null) {
-			mav.setViewName("cms/cms_main");
-			mav.addObject("result", "fail");
-		}else if(admin.getAd_auth().equals("0")){
-			mav.setViewName("cms/cms_main");
-			mav.addObject("result", "fail_auth");
-		}else{
-			request.getSession().setAttribute("ad_id", map.get("ad_id"));
-			request.getSession().setAttribute("ad_seq", admin.getAd_seq());
-			request.getSession().setAttribute("ad_name", admin.getAd_name());
-			request.getSession().setAttribute("ad_contact", admin.getAd_contact());
-			request.getSession().setAttribute("ad_email", admin.getAd_email());
-			request.getSession().setMaxInactiveInterval(60*30);
-			mav.setViewName("redirect:/boardList?board_division=notice&ad_seq="+admin.getAd_seq());
+		
+		Admin admin = as.selectUserInfo(map);
+		
+		if(ad_division.equals("admin")) {
+			/*관리자로그인*/
+			if (admin == null) { 															//admin 정보가 없을때
+				mav.setViewName("cms/cms_main");
+				mav.addObject("result", "fail");
+			}else if(admin.getAd_auth().equals("0")){ 										//회원가입 승인이 안되었을때
+				mav.setViewName("cms/cms_main");
+				mav.addObject("result", "fail_auth");
+			}else if(!admin.getAd_division().equals("9")){									//계정 구분이 관리자가 아닐때 |  9:관리자, 나머지는 사용자
+				mav.setViewName("cms/cms_main");
+				mav.addObject("result", "fail_autherr");
+			}else{																			//위 조건 충족 시 관리자 정보를 세션에 담는다.
+				request.getSession().setAttribute("ad_id", map.get("ad_id"));
+				request.getSession().setAttribute("ad_seq", admin.getAd_seq());
+				request.getSession().setAttribute("ad_name", admin.getAd_name());
+				request.getSession().setAttribute("ad_contact", admin.getAd_contact());
+				request.getSession().setAttribute("ad_email", admin.getAd_email());
+				request.getSession().setAttribute("ad_division", admin.getAd_division());
+				request.getSession().setAttribute("ad_etc", admin.getAd_etc());				//슈퍼관리자 구분을 위해 etc 칼럼 사용 필드값은 super | 아닐 경우 일반 구분
+				request.getSession().setMaxInactiveInterval(60*30);
+				mav.setViewName("redirect:/boardList?board_division=notice");
 			}
 		}else {
-		/*사용자 로그인*/	
-		/*추후 추가 예정*/	
-			
-			mav.setViewName("cms/cms_main");
-			mav.addObject("result", "fail");
+			/*사용자 로그인*/	
+			if (admin == null) {															//admin 정보가 없을때
+				mav.setViewName("cms/cms_main");
+				mav.addObject("result", "fail");
+			}else if(admin.getAd_auth().equals("0")){										//회원가입 승인이 안되었을때
+				mav.setViewName("cms/cms_main");
+				mav.addObject("result", "fail_auth");
+			}else if(admin.getAd_division().equals("9")){									//관리자가 사용자로 접속시도할 경우 |  9:관리자, 나머지는 사용자
+				mav.setViewName("cms/cms_main");
+				mav.addObject("result", "fail_adminerr");
+			}else{																			//위 조건 충족 시 관리자 정보를 세션에 담는다.
+				request.getSession().setAttribute("ad_id", map.get("ad_id"));
+				request.getSession().setAttribute("ad_seq", admin.getAd_seq());
+				request.getSession().setAttribute("ad_name", admin.getAd_name());
+				request.getSession().setAttribute("ad_contact", admin.getAd_contact());
+				request.getSession().setAttribute("ad_email", admin.getAd_email());
+				request.getSession().setAttribute("ad_division", admin.getAd_division());
+				request.getSession().setAttribute("ad_etc", admin.getAd_etc());				//슈퍼관리자 구분을 위해 etc 칼럼 사용 필드값은 super | 아닐 경우 일반 구분
+				request.getSession().setMaxInactiveInterval(60*30);
+				mav.setViewName("redirect:/boardList?board_division=notice");
+				}
 		}
-		
 		return mav;
 		
 	}
@@ -121,17 +142,19 @@ public class CmsController {
 	@RequestMapping(value = "/adminUpdate")
 	public String adminUpdate(@RequestParam Map<String, Object> paramMap, Admin admin, Model model, HttpServletRequest request, HttpSession session) {
 
-		String division = "my";
-        model.addAttribute("division", division);
+		int ad_seq = admin.getAd_seq(); 
 		
+		String division = "my";	//내정보수정으로 수정창 진입과 사원관리에서 진입 구분을 위해 추가
+        model.addAttribute("division", division);
 		model.addAttribute("admin_info", as.admin_read(admin));
+		model.addAttribute("authList", as.authList(ad_seq));
 		model.addAttribute("result", paramMap.get("result"));
 		
 		return "admin/adminUpdate";
 	}
 	//관리자 정보 공통 수정액션
 	@RequestMapping(value = "/admin_modify_action", method=RequestMethod.POST) 
-	public String admin_modify_action(Admin admin, Model model, HttpServletRequest request, HttpSession session, String division, String pwCheck, String ad_password, String ad_passwordChk, String ad_seq) {
+	public String admin_modify_action(Admin admin, Authority authority, Model model, HttpServletRequest request, HttpSession session, String division, String pwCheck, String ad_password, String ad_passwordChk, int ad_seq, String[] con_division) {
 		
 		Object ss_id = session.getAttribute("ad_id");
 	    String session_id = ss_id.toString();
@@ -141,6 +164,18 @@ public class CmsController {
 		admin.setAd_update_id(session_id);
 		
 		as.admin_update(admin);
+		as.authDelete(authority.getAd_seq());				//게시글 사용 권한 변경을 위해 삭제처리로 초기화
+		
+		if(con_division != null){
+			
+			for (int i = 0; i < con_division.length; ++i) {	//접속 권한 체크 된 값들을 저장
+				authority.setAd_id(admin.getAd_id());
+				authority.setCon_division(con_division[i]);
+				authority.setAuthority("1");
+				as.authInsert(authority);
+			}
+		}
+
 		if(pwCheck.equals("1")) {
 		
 			boolean result = as.passwordCheck(admin);
@@ -156,12 +191,12 @@ public class CmsController {
 			}
 		
 		}else{
-			if(ad_seq.equals(ss_seq)) {
+			String seq = Integer.toString(ad_seq);
+			if(seq.equals(session_seq)) {
 				return "redirect:/adminUpdate?ad_seq=" + session_seq + "&result=sucess";
-			}else {
-				return "redirect:/adminList";	
+			}else{
+				return "redirect:/adminList?result=sucess";	
 			}
-		
 		}
 	}
 	//관리자 목록 및  회원가입 대기자 조회폼
@@ -209,6 +244,7 @@ public class CmsController {
         
 		model.addAttribute("employee_list", as.employee_list(paramMap)); //사원목록 리스트
 		model.addAttribute("wait_list", as.wait_list(paramMap)); //회원가입 대기자 리스트
+		model.addAttribute("result", paramMap.get("result"));
 		
 		return "admin/adminList";
 	}
@@ -217,7 +253,7 @@ public class CmsController {
   	public String admin_delete(int[] ad_seq, HttpServletRequest request) {
   		for (int i = 0; i < ad_seq.length; i++) {
   			
-  		
+  		as.authDelete(ad_seq[i]);
   		as.employee_delete(ad_seq[i]);
   		}
   		
@@ -232,7 +268,6 @@ public class CmsController {
   		for (int i = 0; i < chk.length; i++) {
   		
   					admin.setAd_seq(chk[i]);
-  					admin.setAd_auth("1");
   					//직급 및 입사일은 필요시에 사용 할 것 2019-02-11
   					/*admin.setAd_rank(ad_rank[i]);*/
 					/*admin.setAd_hiredate(ad_hiredate[i]);*/
@@ -260,11 +295,11 @@ public class CmsController {
 
 		return "admin/logout";
 	}
-	//로그아웃
-	@RequestMapping(value = "/mainMove") 
-	public String mainMove(HttpServletRequest request) {
-
-		return "admin/mainMove";
+    //로그아웃		
+	@RequestMapping(value = "/mainMove") 		
+	public String mainMove(HttpServletRequest request) {		
+			
+		return "admin/mainMove";		
 	}
 	//공지사항 목록
   	@RequestMapping(value = "/boardList") 
@@ -308,6 +343,18 @@ public class CmsController {
   		model.addAttribute("board_division", paramMap.get("board_division"));
   		model.addAttribute("board_list", boardService.board_list(paramMap));
   		
+  		//-------------------------------------------------------------
+  		//컨텐츠 허용 권한을 위해 추가 함 2019-03-05
+  		//권한을 막을 곳에 해당 소스 삽입 후 get방식으로 넘겨 주면 됨
+  		//ex)boardList?board_division=sample
+  		//jsp단에서는  <c:if test="${auth == '1'}" /> 이런식으로 사용함 | 1:허용 , 1이 아니면 허용 X  
+  		Map<String, Object> paraAuth = new HashMap<String, Object>();
+        paraAuth.put("ad_id", session.getAttribute("ad_id"));
+        paraAuth.put("con_division", paramMap.get("board_division"));
+        String auth = as.getAuth(paraAuth);
+        model.addAttribute("auth", auth);
+        //-------------------------------------------------------------
+        
   		return "board/boardList";
   	}
   	//공통 CMS 게시판 작성 폼
@@ -360,12 +407,15 @@ public class CmsController {
 		        String time = dateFormat.format(cal.getTime());
 		        
 		        List<MultipartFile> files = fileup.getUploadfile();
+				System.out.println("File ----->" + files);
 				if (null != files && files.size() > 0) {
 					
 					
 					for (MultipartFile multipartFile : files) {
+						System.out.println("----------------->?" + multipartFile);
 						if (!"".equals(multipartFile.getOriginalFilename()) && multipartFile.getSize() > 0) {
 						
+							System.out.println("file = " + multipartFile.getOriginalFilename() + "/" + multipartFile.getSize());
 							// 상대경로 
 							String file_path = request.getSession().getServletContext().getRealPath("/");
 							
@@ -377,6 +427,7 @@ public class CmsController {
 							
 								
 							File f = new File(file_path + attach_path + file_sub_name);
+							System.out.println("===========자료실 파일업로드 실제 Path=========" + f);
 							
 							if(!f.exists()) {
 								f.mkdirs();
@@ -395,8 +446,13 @@ public class CmsController {
 							long fsize = multipartFile.getSize();
 							String Fsize = String.valueOf(fsize);
 
+					        System.out.println(" size = " + Fsize + " bytes");
+					 
+							
 							boardFile.setFile_size(Fsize);
 
+							System.out.println("확장명 : " + fileExt);
+							
 							boardFileService.file_insert(boardFile);
 							
 							try {
@@ -465,6 +521,8 @@ public class CmsController {
 								
 								File f = new File(file_path + attach_path + file_sub_name);
 								
+								System.out.println("===========자료실 파일업로드 실제 Path=========" + f);
+								
 								if(!f.exists())
 									f.mkdirs();
 								
@@ -482,7 +540,9 @@ public class CmsController {
 								long fsize = multipartFile.getSize();
 								String file_size = String.valueOf(fsize);
 
+						        System.out.println(" size = " + file_size + " bytes");
 								boardFile.setFile_size(file_size);
+								System.out.println("확장명 : " + fileExt);
 								
 								boardFileService.file_insert(boardFile);
 								
@@ -507,6 +567,8 @@ public class CmsController {
 			    		
 			    		for(int i=0; i<file_key.length ; i++) {
 			    			
+			    			System.out.println("===========fileKey==============>" + file_key[i]);
+			    			System.out.println("===========flag==============>" + flag[i]);
 			        		//flag가 D인건 삭제. 데이터도 삭제, 파일도 삭제.
 			    			if("D".equals(flag[i])) {
 			    				boardFile.setFile_seq(Integer.parseInt(file_key[i]));
@@ -552,6 +614,7 @@ public class CmsController {
    		try {
 			 /*상대경로 */
    		String file_path = request.getSession().getServletContext().getRealPath("/");
+   		System.out.println("file_path ==============>? ? ? " + file_path);
    		String attach_path = "";
    		
    		attach_path = "resources/uploadFile/"+board_division+"/";

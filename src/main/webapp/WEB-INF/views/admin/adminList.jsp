@@ -12,6 +12,11 @@
 <script type="text/javascript">
 //체크박스 선택제어
 $(document).ready(function() {
+			
+			if ($("#result").val() == 'sucess') {
+				alert("정보가 수정 되었습니다.");
+			}
+	
 			$("#product_check_all").click(function() {
 				
 						var chk = $(this).is(":checked");
@@ -54,6 +59,7 @@ $(document).ready(function() {
 <input type="hidden" id="pageVal" value="adminList" />
 <div class="conBody">
 	<div class="boardBody">
+		<input type="hidden" id="result" name="result" value="${result}">
 		<input type="hidden" id="startPageList" name="startPageList" value="${startPage}">
 		<input type="hidden" id="totalPage" name="totalPage" value="${totalPage}">
 		<input type="hidden" id="totalCnt" name="totalCnt" value="${totalCnt}">
@@ -104,7 +110,7 @@ $(document).ready(function() {
 				<c:if test="${list.ad_id != 'interlinknc'}">
 				<tr>
 					<td>
-					<c:if test="${list.ad_division != 9}">
+					<c:if test="${list.ad_etc != 'super'}">
 					<input type="checkbox" class="check" id="checkOne" name="ad_seq" value="${list.ad_seq}" />
 					</c:if>
 					</td>
@@ -181,11 +187,16 @@ $(document).ready(function() {
 			</c:forEach>
 		</table>
 	</div>
-	</form>
 	<div class="boardWrite">
+		<select name="ad_division">
+  			<option value="1">사용자</option>
+  			<option value="9">관리자</option>
+		</select>
+		<input type="hidden" name="ad_auth" value="1">
 		<a class="writeBtn" onclick="waitDelete()">거절</a>
 		<a class="writeBtn" onclick="waitSubmit()">승인</a>
 	</div>
+	</form>
 	
 <a class="adminPopupClose" href="#close"></a>
 </div>

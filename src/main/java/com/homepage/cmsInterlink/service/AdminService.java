@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.homepage.cmsInterlink.model.Admin;
+import com.homepage.cmsInterlink.model.Authority;
 
 public interface AdminService {
 	int insert(Admin admin);
@@ -21,4 +22,8 @@ public interface AdminService {
 	public int employee_delete(int ad_seq);
 	List<Admin> wait_list(Map<String, Object> paramMap);
 	public int wait_admit(Admin admin);
+	public int authDelete(int ad_seq);
+	public int authInsert(Authority authority);
+	List<Authority> authList(int ad_seq);
+	String getAuth(Map<String, Object> paraAuth);
 }

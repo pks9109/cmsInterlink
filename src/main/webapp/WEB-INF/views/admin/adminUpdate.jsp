@@ -22,8 +22,16 @@ jQuery(document).ready(function($){
     		$('#pwCheck').val("1");
     	}
     });
+	
+	$("#selectBox").val("${admin_info.ad_division}").prop("selected", true);
 });
 </script>
+
+<style type="text/css">
+	.checkbox input{
+		height: auto;
+	}
+</style>
 </head>
 <body>
 <%@ include file="../cms/cms_header.jsp"%>
@@ -41,14 +49,15 @@ jQuery(document).ready(function($){
 					<col style="width: 20%" />
 					<col style="width: 80%" />
 				</colgroup>
-				<tr><td>이름</td><td>
+				<tr><td>이름</td><td class="textLeft">
 				<input type="text" id="ad_name" name="ad_name" value="${admin_info.ad_name}" readonly="readonly"/>
 				<input type="hidden" id="ad_seq" name="ad_seq" value="${admin_info.ad_seq}" />
 				<input type="hidden" id="ss_seq" name="ss_seq" value="${sessionScope.ad_seq}" />			
 				<input type="hidden" id="result" name="result" value="${result}" />
 				<input type="hidden" id="division" name="division" value="${division}" />
+				<input type="hidden" name="ad_etc" value="${admin_info.ad_etc}" />
 				</td></tr>
-				<tr><td>아이디</td><td><input type="text" id="ad_id" name="ad_id" value="${admin_info.ad_id}" readonly="readonly" />
+				<tr><td>아이디</td><td class="textLeft"><input type="text" id="ad_id" name="ad_id" value="${admin_info.ad_id}" readonly="readonly" />
 				</td></tr>
 				<tr><td>비밀번호</td><td class="textLeft">
 					<a class="passwordBut">비밀번호 변경</a>
@@ -59,8 +68,28 @@ jQuery(document).ready(function($){
 						<a>비밀번호 확인</a><input type="password" id="ad_passwordChk" name="ad_passwordChk" />
 					</div>
 				</td></tr>
-				<tr><td>연락처</td><td><input type="text" id="ad_contact" name="ad_contact" value="${admin_info.ad_contact}" /></td></tr>
-				<tr><td>이메일</td><td><input type="text" id="ad_email" name="ad_email" value="${admin_info.ad_email}" /></td></tr>
+				<tr><td>연락처</td><td class="textLeft"><input type="text" id="ad_contact" name="ad_contact" value="${admin_info.ad_contact}" /></td></tr>
+				<tr><td>이메일</td><td class="textLeft"><input type="text" id="ad_email" name="ad_email" value="${admin_info.ad_email}" /></td></tr>
+				<c:if test="${sessionScope.ad_division == 9}">
+				<!-- 슈퍼관리자는 권한 구분 설정 X -->
+				<c:if test="${admin_info.ad_etc != 'super'}">
+				<tr>
+					<td>권한 구분</td>
+					<td class="textLeft">
+					<select id="selectBox" name="ad_division" style="margin-left: 15px;">
+			  			<option value="1">사용자</option>
+			  			<option value="9">관리자</option>	
+					</select>
+					</td>
+				</tr>
+				</c:if>
+				<tr>
+				    <td>접속 권한</td>
+				    <td class="textLeft">
+				    <input type="text" value="공지사항" /><input type="checkbox" name='con_division' value='notice' style="height: auto;" />
+				    </td>
+				  </tr>
+				</c:if>  
 			</table>
 			<div class="pubText">
 			<c:if test="${result == 'sucess'}">
@@ -78,6 +107,11 @@ jQuery(document).ready(function($){
 			</div>
 		</div>
 		</form>
+	<script>
+	<c:forEach var="item" items="${authList}" varStatus="status">
+    	$("input[name='con_division'][value='${item.con_division}']").attr("checked", "checked");
+	</c:forEach>
+	</script>
 	</div>
 </div>
 </body>

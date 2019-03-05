@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.homepage.cmsInterlink.model.Admin;
+import com.homepage.cmsInterlink.model.Authority;
 
 @Repository
 public class AdminDaoImpl implements AdminDao{
@@ -88,6 +89,28 @@ public class AdminDaoImpl implements AdminDao{
 	public int wait_admit(Admin admin) {
 		return sst.update("admins.wait_admit", admin);
 	}
+
+	@Override
+	public int authDelete(int ad_seq) {
+		return sst.delete("admins.authDelete", ad_seq);
+	}
+
+	@Override
+	public int authInsert(Authority authority) {
+		return sst.insert("admins.authInsert", authority);
+	}
+
+	@Override
+	public List<Authority> authList(int ad_seq) {
+		return sst.selectList("admins.authList", ad_seq);
+	}
+
+	@Override
+	public String getAuth(Map<String, Object> paraAuth) {
+		return sst.selectOne("admins.getAuth", paraAuth);
+	}
+	
+	
 	
 	
 	

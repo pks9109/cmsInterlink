@@ -20,7 +20,6 @@
 			<input type="hidden" id="totalPage" name="totalPage" value="${totalPage}">
 			<input type="hidden" id="totalCnt" name="totalCnt" value="${totalCnt}">
 		<form name="list_form"  method="get">
-		<input type="hidden" id="board_division" name="board_division" value="${board_division}">
 		<input type="hidden" id="startPage" name="startPage" value="">
 		<input type="hidden" id="visiblePages" name="visiblePages" value="">
 		<div class="boardSearch">
@@ -74,7 +73,9 @@
 			</table>
 		</div>
 		<div class="boardWrite">
+			<c:if test="${auth eq '1'}">
 			<a class="writeBtn1" style="color: black; text-decoration: none;" href="<%=request.getContextPath()%>/boardWrite?board_division=notice">글쓰기</a>
+			</c:if>
 		</div>
 		<div class="boardCount">
 			<c:if test="${fn:length(board_list) != 0}">

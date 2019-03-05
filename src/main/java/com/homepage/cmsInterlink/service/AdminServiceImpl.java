@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.homepage.cmsInterlink.dao.AdminDao;
 import com.homepage.cmsInterlink.model.Admin;
+import com.homepage.cmsInterlink.model.Authority;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -82,9 +83,27 @@ public class AdminServiceImpl implements AdminService {
 		return ad.wait_admit(admin);
 		
 	}
-	
-	
-	
 
+	@Override
+	public int authDelete(int ad_seq) {
+		return ad.authDelete(ad_seq);
+	}
+
+	@Override
+	public int authInsert(Authority authority) {
+		return ad.authInsert(authority);
+	}
+
+	@Override
+	public List<Authority> authList(int ad_seq) {
+		return ad.authList(ad_seq);
+	}
+
+	@Override
+	public String getAuth(Map<String, Object> paraAuth) {
+		return ad.getAuth(paraAuth);
+	}
+
+	
 	
 }

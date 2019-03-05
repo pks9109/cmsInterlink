@@ -50,6 +50,10 @@ $(document).ready(function(){
 		alert("아이디와 비밀번호를 확인해주세요.");
 	}else if($("#result").val() == 'fail_auth'){
 		alert("관리자의 승인이 되지 않았습니다.");
+	}else if($("#result").val() == 'fail_autherr'){
+		alert("접근권한이 없습니다. 관리자에게 권한을 확인하시기 바랍니다.");
+	}else if($("#result").val() == 'fail_adminerr'){
+		alert("관리자 계정은 관리자 모드로 접속해주시기 바랍니다.");
 	}
 		
 });
@@ -64,8 +68,8 @@ $(document).ready(function(){
 	<hr class="bar"> 
 	<form id="login_form">
 	<div class="mode_ch">
-	<input type="radio" id="mode_emp" name="loginSelect" value="user" checked="checked" > <label for="mode_emp">사용자 모드</label> &emsp;&emsp;
-	<input type="radio" id="mode_admin" name="loginSelect" value="admin"> <label for="mode_admin">관리자 모드</label>
+	<input type="radio" id="mode_emp" name="ad_division" value="user" checked="checked" > <label for="mode_emp">사용자 모드</label> &emsp;&emsp;
+	<input type="radio" id="mode_admin" name="ad_division" value="admin"> <label for="mode_admin">관리자 모드</label>
 	</div>
 	<input type="hidden" id="result" name="result" value="${result}" />
 	<div class="con2">

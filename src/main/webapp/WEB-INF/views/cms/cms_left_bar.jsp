@@ -15,7 +15,9 @@
 <!-- 		<li class="" id="board02"><a class="li_A" href="#"> Board02</a></li>
 			<li class="" id="board03"><a class="li_A" href="#"> Board03</a></li> -->
 		<li class="title">설정</li>
+		<c:if test="${sessionScope.ad_division == '9'}"><!-- 계정 권한이 관리자 일때 활성화 -->
 			<li class="" id="adminList"><a class="li_A" href="<%=request.getContextPath()%>/adminList"> 사원관리</a></li>
+		</c:if>	
 			<li class="" id="admin"><a class="li_A" href="<%=request.getContextPath()%>/adminUpdate?ad_seq=${ad_seq}"> 내정보수정</a></li>
 	</ul>
 </div>

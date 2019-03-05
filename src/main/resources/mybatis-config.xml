@@ -8,6 +8,7 @@
 		<typeAlias type="com.homepage.cmsInterlink.model.Admin" alias="admin"/>
 		<typeAlias type="com.homepage.cmsInterlink.model.Board" alias="board"/>
 		<typeAlias type="com.homepage.cmsInterlink.model.BoardFile" alias="boardFile"/>
+		<typeAlias type="com.homepage.cmsInterlink.model.Authority" alias="authority"/>
 	</typeAliases>
 
 	<mappers>
