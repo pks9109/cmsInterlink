@@ -63,9 +63,9 @@ jQuery(document).ready(function($){
 					<a class="passwordBut">비밀번호 변경</a>
 					<div class="password" style="display: none;">
 						<input type="hidden" id="pwCheck" name="pwCheck" value="0" />
-						<a>기존비밀번호</a><input type="password" id="ad_ori_password" name="ad_ori_password" />
-						<a>새 비밀번호</a><input type="password" id="ad_password" name="ad_password" />
-						<a>비밀번호 확인</a><input type="password" id="ad_passwordChk" name="ad_passwordChk" />
+						<a>기존비밀번호</a><input type="password" id="ad_ori_password" name="ad_ori_password" style="width:100%;" /><br>
+						<a>새 비밀번호</a><input type="password" id="ad_password" name="ad_password" style="width:100%;" /><br>
+						<a>비밀번호 확인</a><input type="password" id="ad_passwordChk" name="ad_passwordChk" style="width:100%;" />
 					</div>
 				</td></tr>
 				<tr><td>연락처</td><td class="textLeft"><input type="text" id="ad_contact" name="ad_contact" value="${admin_info.ad_contact}" /></td></tr>
