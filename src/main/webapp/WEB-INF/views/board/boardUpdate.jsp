@@ -106,13 +106,16 @@ $(document).on("click","#save",function(e){
 					</div>
 				</li>
 				<li	class="fileBut">	
-					
+					<c:if test="${auth eq '1'}">
 					<a id="newFile" >파일 첨부</a>
+					</c:if>
 					<!-- <a>선택 삭제</a> -->
 				</li>
 				<li class="writeBut">
+					<c:if test="${auth eq '1'}">
 					<a id="save">SAVE</a>
 					<a id="delete">DELETE</a>
+					</c:if>
 				</li>
 			</ul>
 		

@@ -367,10 +367,22 @@ public class CmsController {
 	}
 	//공통 CMS 게시판 수정 폼
 	@RequestMapping(value = "/boardUpdate")
-	public String boardUpdate(@RequestParam Map<String, Object> paramMap, Model model, Board board) {
+	public String boardUpdate(@RequestParam Map<String, Object> paramMap, Model model, Board board, HttpSession session) {
 	   model.addAttribute("board_division", paramMap.get("board_division"));
        model.addAttribute("file_list",boardFileService.file_list(paramMap));
 	   model.addAttribute("board_update",boardService.board_read(board));
+	   
+	   //-------------------------------------------------------------
+ 		//컨텐츠 허용 권한을 위해 추가 함 2019-03-05
+ 		//권한을 막을 곳에 해당 소스 삽입 후 get방식으로 넘겨 주면 됨
+ 		//ex)boardList?board_division=sample
+ 		//jsp단에서는  <c:if test="${auth == '1'}" /> 이런식으로 사용함 | 1:허용 , 1이 아니면 허용 X  
+	   Map<String, Object> paraAuth = new HashMap<String, Object>();
+       paraAuth.put("ad_id", session.getAttribute("ad_id"));
+       paraAuth.put("con_division", paramMap.get("board_division"));
+       String auth = as.getAuth(paraAuth);
+       model.addAttribute("auth", auth);
+       //-------------------------------------------------------------
 		
 	   return "board/boardUpdate";
 	}
